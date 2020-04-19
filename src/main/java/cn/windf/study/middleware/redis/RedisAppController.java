@@ -7,6 +7,9 @@ import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.params.SetParams;
 
+import java.util.Collections;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/redis")
 public class RedisAppController {
@@ -19,11 +22,21 @@ public class RedisAppController {
      * @return
      */
     @GetMapping("/lock")
-    public Object distributedLock() {
+    public Object distributedLock(boolean needRelease) {
+        String requestId = UUID.randomUUID().toString();
+
         int ncount = counter;
-        String result = jedisCluster.set("redisLock", "1", SetParams.setParams().nx().ex(1));
+
+        // 验证锁
+        String result = jedisCluster.set("redisLock", requestId, SetParams.setParams().nx().ex(1));
         if ("OK".equals(result)) {
             ncount = ++counter;
+        }
+
+        // 释放锁，通过lua脚本，保证原子性
+        if (needRelease) {
+            String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+            jedisCluster.eval(script, Collections.singletonList("redisLock"), Collections.singletonList(requestId));
         }
 
         return ncount;
