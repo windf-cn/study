@@ -15,7 +15,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/redis")
-public class RedisController {
+public class RedisValueController {
 
     /**
      * 手动连接sentinel,进行设置
