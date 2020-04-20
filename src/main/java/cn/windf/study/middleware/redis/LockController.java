@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/redis")
-public class RedisAppController {
+public class LockController {
     private JedisCluster jedisCluster = new JedisCluster(new HostAndPort("192.168.1.202", 6379));
 
     private int counter = 0;
