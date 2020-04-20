@@ -16,7 +16,7 @@ public class ClusterController {
      * cluster的手动方式
      * @param key   redis的key
      * @param value  redis的value，用于list结构，栈
-     * @return
+     * @return 返回设置成功的标识
      */
     @GetMapping("/handwork")
     public Object clusterHandwork(String key, String value) {
@@ -29,8 +29,8 @@ public class ClusterController {
 
     /**
      * cluster通过注入操作
-     * @param key
-     * @return
+     * @param key 要获取的key
+     * @return key对应的value
      */
     @GetMapping("/autowired")
     public Object clusterAutowired(String key) {

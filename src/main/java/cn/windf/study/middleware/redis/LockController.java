@@ -19,7 +19,7 @@ public class LockController {
 
     /**
      * 分布式锁的应用
-     * @return
+     * @return 计数的总数
      */
     @GetMapping("/lock")
     public Object distributedLock(boolean needRelease) {
