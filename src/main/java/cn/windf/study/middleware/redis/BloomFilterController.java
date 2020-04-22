@@ -65,7 +65,7 @@ public class BloomFilterController {
             return "cached，value:" + value;
         }
 
-        // TODO 防止并发重复写缓存（同时多个key不存在，可能会同时去查询），加锁
+        // TODO 防止并发重复写缓存（同时多个key不存在，可能会同时去查询），加锁，考虑使用分布式锁
         synchronized (key) {
             value = redisTemplate.opsForValue().get(key);
             if (value != null) {
