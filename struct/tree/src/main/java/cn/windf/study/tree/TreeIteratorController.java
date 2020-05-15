@@ -4,10 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/tree/iterator")
@@ -60,22 +57,6 @@ public class TreeIteratorController {
         return "size:" + nodes.size();
     }
 
-    private void middle(TreeNode root) {
-
-        Deque<TreeNode> stack = new LinkedList<>();
-        stack.push(root);
-
-        while (!stack.isEmpty()) {
-            TreeNode node = stack.peek();
-
-            while (node.left != null) {
-                stack.push(node.left);
-                node = node.left;
-            }
-
-        }
-    }
-
     private void recursionMiddle(TreeNode treeNode) {
         if (treeNode == null) {
             return;
@@ -120,11 +101,39 @@ public class TreeIteratorController {
         nodes.add(treeNode);
     }
 
+    /**
+     * 非递归中序遍历
+     * @param root
+     */
+    private void middle(TreeNode root) {
+
+        Deque<TreeNode> stack = new LinkedList<>();
+        Set<TreeNode> nodeSet = new HashSet<>();
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.peek();
+
+            while (node.left != null && !nodeSet.contains(node)) {
+                stack.push(node.left);
+                nodeSet.add(node);
+                node = node.left;
+            }
+
+            this.nodes.add(stack.pop());
+
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         TreeIteratorController controller = new TreeIteratorController();
-        controller.recursionPost();
+//        controller.recursionPost();
 //        controller.recursionPre();
 //        controller.recursionMiddle();
+        controller.middle(controller.rootMiddle);
 
         for (TreeNode n : controller.nodes) {
             for (int i = 1; i <= n.data; i++) {
