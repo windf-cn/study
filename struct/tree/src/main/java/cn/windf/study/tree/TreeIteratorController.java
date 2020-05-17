@@ -13,6 +13,7 @@ public class TreeIteratorController {
     TreeNode rootMiddle;
     TreeNode rootPre;
     TreeNode rootPost;
+    TreeNode rootLayer;
 
     public TreeIteratorController() {
         rootMiddle = new TreeNode(6);
@@ -25,7 +26,6 @@ public class TreeIteratorController {
         rootMiddle.right.left = new TreeNode(7);
         rootMiddle.right.left.right = new TreeNode(8);
 
-
         rootPre = new TreeNode(1);
         rootPre.left = new TreeNode(2);
         rootPre.left.left = new TreeNode(3);
@@ -36,7 +36,6 @@ public class TreeIteratorController {
         rootPre.right.left = new TreeNode(8);
         rootPre.right.left.right = new TreeNode(9);
 
-
         rootPost = new TreeNode(9);
         rootPost.left = new TreeNode(5);
         rootPost.left.left = new TreeNode(1);
@@ -46,6 +45,16 @@ public class TreeIteratorController {
         rootPost.right = new TreeNode(8);
         rootPost.right.left = new TreeNode(7);
         rootPost.right.left.right = new TreeNode(6);
+
+        rootLayer = new TreeNode(1);
+        rootLayer.left = new TreeNode(2);
+        rootLayer.left.left = new TreeNode(4);
+        rootLayer.left.right = new TreeNode(5);
+        rootLayer.left.right.left = new TreeNode(7);
+        rootLayer.left.right.right = new TreeNode(8);
+        rootLayer.right = new TreeNode(3);
+        rootLayer.right.left = new TreeNode(6);
+        rootLayer.right.left.right = new TreeNode(9);
     }
 
     private List<TreeNode> nodes = new ArrayList<>(9);
@@ -182,6 +191,24 @@ public class TreeIteratorController {
         }
     }
 
+    public void layer(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+
+        while(!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            this.nodes.add(node);
+
+            if (node.left != null) {
+                queue.add(node.left);
+            }
+            if (node.right != null) {
+                queue.add(node.right);
+            }
+        }
+
+    }
+
     public static void main(String[] args) {
         TreeIteratorController controller = new TreeIteratorController();
 //        controller.recursionPost();
@@ -189,7 +216,8 @@ public class TreeIteratorController {
 //        controller.recursionMiddle();
 //        controller.middle(controller.rootMiddle);
 //        controller.pre(controller.rootPre);
-        controller.post(controller.rootPost);
+//        controller.post(controller.rootPost);
+        controller.layer(controller.rootLayer);
 
         for (TreeNode n : controller.nodes) {
             for (int i = 1; i <= n.data; i++) {
