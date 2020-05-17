@@ -152,13 +152,44 @@ public class TreeIteratorController {
         }
     }
 
+    /**
+     * 非递归先序遍历
+     * @param root
+     */
+    private void post(TreeNode root) {
+
+        Deque<TreeNode> stack = new LinkedList<>();
+        stack.push(root);
+        Set<TreeNode> selectNodes = new HashSet<>();
+
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.peek();
+
+            if (selectNodes.contains(node)) {
+                this.nodes.add(stack.pop());
+                continue;
+            }
+
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+
+            selectNodes.add(node);
+        }
+    }
+
     public static void main(String[] args) {
         TreeIteratorController controller = new TreeIteratorController();
 //        controller.recursionPost();
 //        controller.recursionPre();
 //        controller.recursionMiddle();
 //        controller.middle(controller.rootMiddle);
-        controller.pre(controller.rootPre);
+//        controller.pre(controller.rootPre);
+        controller.post(controller.rootPost);
 
         for (TreeNode n : controller.nodes) {
             for (int i = 1; i <= n.data; i++) {
